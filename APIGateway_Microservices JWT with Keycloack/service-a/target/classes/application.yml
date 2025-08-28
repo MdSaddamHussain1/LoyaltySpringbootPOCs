@@ -1,0 +1,22 @@
+server:
+  port: 8082
+
+spring:
+  application:
+    name: service-a
+
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:8080/realms/apiGatewayRealm
+      client:
+        registration:
+          service-b:
+            provider: keycloak
+            client-id: service-a
+            client-secret: Xz6wGDsQ4GCUnJHvQVXiJLkVLfI1bm7L
+            authorization-grant-type: client_credentials
+        provider:
+          keycloak:
+            issuer-uri: http://localhost:8080/realms/apiGatewayRealm

@@ -1,0 +1,42 @@
+server:
+  port: 8081
+
+spring:
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:8080/realms/apiGatewayRealm
+      client:
+        registration:
+          gateway-client:
+            client-id: gateway-client
+            client-secret: Xz6wGDsQ4GCUnJHvQVXiJLkVLfI1bm7L
+            authorization-grant-type: client_credentials   #used for service-to-service JWT communication
+            scope: openid
+            provider: keycloak   #  must reference provider
+        provider:
+          keycloak:
+            issuer-uri: http://localhost:8080/realms/apiGatewayRealm
+
+  cloud:
+    gateway:
+      default-filters:
+        - TokenRelay
+      routes:
+        - id: service-a
+          uri: http://localhost:8082
+          predicates:
+            - Path=/service-a/**
+          filters:
+            - StripPrefix=1
+        - id: service-b
+          uri: http://localhost:8083
+          predicates:
+            - Path=/service-b/**
+          filters:
+            - StripPrefix=1
+
+logging:
+  level:
+    org.springframework.security: INFO
